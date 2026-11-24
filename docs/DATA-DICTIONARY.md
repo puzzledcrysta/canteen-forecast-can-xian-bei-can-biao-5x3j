@@ -26,6 +26,22 @@
 
 同一对输入字节与规则版本生成同一批次，导出包含两个文件摘要、证据行、单边差异和复核修订记录。复核保存前检查当前版本，在有隔离、差异或退回时必须填写意见。
 
+## 回执对账（月底关账）
+
+| 字段 | 定义 |
+|---|---|
+| 回执编号 `receipt_id` | 文本主键，最长 64。多个档口合开的回执共用同一编号。 |
+| 档口 `stall` | 文本，最长 64。回执登记时记录先到档口，认领时记录认领档口。 |
+| 回执总份数 `total_portions` | 正整数。同一编号重报时档口与总额必须完全一致，否则 `RECEIPT_CONFLICT`。 |
+| 认领份数 `portions` | 正整数。落库条件：`已确认份额 + 本次份额 ≤ 回执总额`，否则 `OVER_BALANCE`。 |
+| 认领状态 `status` | `confirmed`（已确认）或 `reversed`（已冲销）。 |
+
+接口：`POST /api/settle/receipts` 登记回执（幂等）；`POST /api/settle/receipts/{id}/claims` 提交认领；`POST .../claims/{claim_no}/reverse` 冲销；`POST /api/settle/receipts/{id}/close` 关账；`GET /api/settle/receipts/{id}` 查看快照。
+
+认领编号 `claim_no` 在同一回执内自增。同档口同份额重复提交幂等返回原认领；同档口已有 `reversed` 认领后重提返回 `CLAIM_REVERSED`（终态，不重新占用余额，须另开新认领）。冲销仅释放该认领自身份额，其他档口的 `confirmed` 记录保持有效，重复冲销幂等。
+
+关账结论字段：`occupied_portions`（已确认占用）、`reversed_portions`（已冲销）、`remaining_portions`（可用余额）、`unclaimed_portions`（未认领）、`settled_portions`（已结=已确认占用）、`unsettled_portions`（未结=未认领）、`fully_settled`（未结为 0 时为真）、`unsettled`（逐回执未结明细）。关账后写操作一律返回 `RECEIPT_CLOSED`，关账调用本身幂等。
+
 ## 随附算例
 
 | 算例 | 预期结果 | 可核明细 |

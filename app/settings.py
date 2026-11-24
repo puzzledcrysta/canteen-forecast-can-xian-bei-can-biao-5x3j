@@ -12,4 +12,4 @@ ROLE = '园区食堂档口备餐员'
 UNIT = '份'
 RULE_VERSION = 'canteen-forecast-1.0'
 SIGNATURE = '可比日样本'
-TABS = {'intake': '营业报数', 'contract': '备餐字段', 'quality': '异常日单', 'domain': '分位备餐', 'reconcile': '备料清单', 'runs': '餐线批次', 'review': '排产复核'}
+TABS = {'intake': '营业报数', 'contract': '备餐字段', 'quality': '异常日单', 'domain': '分位备餐', 'reconcile': '备料清单', 'runs': '餐线批次', 'review': '排产复核', 'settle': '回执对账'}

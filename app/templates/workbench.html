@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/static/theme.css">
   <link rel="stylesheet" href="/static/stove.css">
   <script type="module" src="/static/workspace.js"></script>
+  <script type="module" src="/static/settle.js"></script>
 </head>
 <body class="stove">
   <div class="workbench">
@@ -59,6 +60,39 @@
       <div class="panel__head"><h2>可比日样本</h2><span class="num" id="evidence-key"></span></div>
       <div class="panel__body" id="signal" aria-live="polite"><p class="empty">选择一条复算记录</p></div>
     </article></div>
+
+    <div class="grid" id="settle-panel" hidden>
+      <section class="panel source" aria-labelledby="receipt-form-title">
+        <div class="panel__head"><h2 id="receipt-form-title">登记回执</h2><small>合开回执</small></div>
+        <form id="receipt-form" class="panel__body">
+          <label>回执编号 <input id="receipt-id" required maxlength="64" placeholder="R-202611-01"></label>
+          <label>先到档口 <input id="receipt-stall" required maxlength="64" placeholder="面点档"></label>
+          <label>回执总份数 <input id="receipt-total" type="number" min="1" step="1" required placeholder="100"></label>
+          <div class="actions"><button type="submit" class="btn btn--primary">登记回执</button></div>
+          <output id="settle-notice" class="settle-notice" role="status"></output>
+        </form>
+      </section>
+
+      <section class="panel results" aria-labelledby="settle-title">
+        <div class="panel__head"><h2 id="settle-title">回执对账结论</h2><span class="num" id="settle-receipt-id"></span></div>
+        <form id="lookup-form" class="filters">
+          <label>查看回执 <input id="lookup-id" required maxlength="64" placeholder="回执编号"></label>
+          <button class="btn" type="submit">载入</button>
+        </form>
+        <div class="panel__body">
+          <dl class="settle-kpis" id="settle-kpis"></dl>
+          <div class="scroll" id="settle-claims"><p class="empty">先登记或载入一张回执</p></div>
+          <form id="claim-form" class="panel__body">
+            <label>认领档口 <input id="claim-stall" required maxlength="64" placeholder="热菜档"></label>
+            <label>认领份数 <input id="claim-portions" type="number" min="1" step="1" required placeholder="30"></label>
+            <div class="actions">
+              <button class="btn btn--primary" type="submit">提交认领</button>
+              <button class="btn" id="close-receipt" type="button">关账出结论</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
       </main>
       <footer class="statusbar"><span id="state" role="status">等待输入</span><a href="/openapi.json">接口</a><span>UTC</span></footer>
     </div>

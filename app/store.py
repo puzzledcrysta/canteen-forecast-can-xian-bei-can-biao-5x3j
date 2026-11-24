@@ -13,6 +13,17 @@ CREATE TABLE IF NOT EXISTS reviews (
   decision TEXT NOT NULL, note TEXT NOT NULL, changed TEXT NOT NULL,
   PRIMARY KEY(run_id,version)
 );
+CREATE TABLE IF NOT EXISTS settle_receipts (
+  id TEXT PRIMARY KEY, stall TEXT NOT NULL, total_portions INTEGER NOT NULL,
+  closed_at TEXT
+);
+CREATE TABLE IF NOT EXISTS settle_claims (
+  receipt_id TEXT NOT NULL REFERENCES settle_receipts(id),
+  claim_no INTEGER NOT NULL, stall TEXT NOT NULL, portions INTEGER NOT NULL,
+  status TEXT NOT NULL, changed TEXT NOT NULL,
+  PRIMARY KEY(receipt_id,claim_no)
+);
+CREATE INDEX IF NOT EXISTS idx_settle_claims ON settle_claims(receipt_id,status);
 """
 
 

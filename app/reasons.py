@@ -12,3 +12,10 @@ REASONS = {
 }
 
 REASONS.update({'CANTEEN_DAYTYPE': '日型无效', 'CANTEEN_FORMAT': '营业记录无效', 'CANTEEN_CLOSED': '停业仍有销售', 'CANTEEN_CONFLICT': '营业记录冲突', 'CANTEEN_SPARSE': '可比样本不足', 'DATE': '日期格式无效', 'REV_BLOCKED': '较新来源尚未采信'})
+
+REASONS.update({
+    'RECEIPT_UNKNOWN': '没有此回执', 'RECEIPT_CONFLICT': '回执登记信息冲突',
+    'RECEIPT_CLOSED': '回执已关账', 'CLAIM_UNKNOWN': '没有此认领',
+    'CLAIM_REVERSED': '原认领已冲销，须以新认领重新提交',
+    'OVER_BALANCE': '认领份数超过回执可用余额',
+})

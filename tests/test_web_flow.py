@@ -18,3 +18,15 @@ def test_malformed_sample_can_retry(client):
 def test_accepted_single_source_has_external_diff(client):
     report = client.post('/api/reconcile',json={}).json()
     assert report['balanced'] and report['book']['mismatched']==3
+
+
+def test_settle_workbench_assets_and_end_to_end(client):
+    page = client.get('/')
+    assert page.status_code == 200 and '回执对账' in page.text
+    assert 'settle.js' in page.text and client.get('/static/settle.js').status_code == 200
+    client.post('/api/settle/receipts', json={'receipt_id': 'R-WEB', 'stall': '面点档', 'total_portions': 50})
+    claim = client.post('/api/settle/receipts/R-WEB/claims', json={'stall': '面点档', 'portions': 20})
+    assert claim.status_code == 200
+    close = client.post('/api/settle/receipts/R-WEB/close').json()
+    assert close['unclaimed_portions'] == 30 and close['settled_portions'] == 20
+    assert close['fully_settled'] is False
